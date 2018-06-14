@@ -17,7 +17,7 @@ function arrivesInRoom(){
 function getUserAction(){
     console.log('\n>_')
     process.stdin.once('data', (chunk) => {
-    userAction = chunk.toString().trim();
+    userAction = chunk.toString().trim().toLowerCase();
     if (currentRoom === '182 Main St.') {
         checkActionMainSt()
     } else if (currentRoom === 'Foyer'){
@@ -40,26 +40,28 @@ function checkActionMainSt(){
         getUserAction()
     } else if(userAction === 'look around'){
         arrivesInRoom()
-    } else if(userAction === 'check inventory') {
-        console.log(playerInventory)
-        getUserAction()
+    } else if(userAction === 'check inventory' || userAction ==='i' || userAction ==='inventory') {
+        checkInventory()
     } else if(userAction === 'enter code 12345' || userAction === 'enter 12345' || userAction === '12345'){
         console.log('Success! The door opens. You enter the foyer and the \ndoor shuts behind you')
         currentRoom = 'Foyer'
         arrivesInRoom()
+    } else if (userAction.slice(-5) !== '12345' && (userAction.slice(0,10) === 'enter code' || userAction.slice(0,5) === 'enter')) {
+        console.log('Bzzzzt! The door is still locked')
+        getUserAction()
     }else error(userAction)
 };
 
 function checkActionFoyer(){
     if(userAction === 'look around'){
         arrivesInRoom()
-    } else if(userAction === 'check inventory') {
-        console.log(playerInventory)
-        getUserAction()
+    } else if(userAction === 'check inventory' || userAction ==='i' || userAction ==='inventory') {
+        checkInventory()
     } else if(userAction === 'take paper' || userAction ==='take seven days'){
         console.log('You pick up the paper and leaf through it looking for \ncomics and ignoring the articles, just like everybody \nelse does.')
         addInventory('newspaper', 'Seven Days Newspaper')
         getUserAction()
+        roomDescriptions['Foyer'] = 'You are in a foyer. Or maybe it\'s an antechamber. Or \na vestibule. Or an entryway. Or an atrium. Or a \nnarthex. But let\'s forget all that fancy flatlander \nvocabulary,and just call it a foyer. In Vermont, this \nis pronounced "FO-ee-yurr".'
     } else error(userAction)
 };
 
@@ -72,3 +74,18 @@ function addInventory(item, description) {
     playerInventory[item] = description
     console.log('\nYou have added the ' + item + ' to your inventory!')
 };
+
+function displayHelp(){
+
+}
+
+function checkInventory(){
+
+    if (playerInventory === {}){
+        console.log('You are not carrying anything')
+    } 
+
+    else console.log(`You are carrying:`)
+        console.log(playerInventory)
+        getUserAction()
+}
