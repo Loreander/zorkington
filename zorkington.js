@@ -1,4 +1,4 @@
-console.log('Your journey begins....\n')
+
 currentRoom = '182 Main St.';
 playerInventory = {}
 roomDescriptions = {
@@ -6,14 +6,13 @@ roomDescriptions = {
  
     'Foyer': 'You are in a foyer. Or maybe it\'s an antechamber. Or \na vestibule. Or an entryway. Or an atrium. Or a \nnarthex. But let\'s forget all that fancy flatlander \nvocabulary,and just call it a foyer. In Vermont, this \nis pronounced "FO-ee-yurr". A copy of Seven Days lies \nin a corner.'}
 
-arrivesInRoom();
 
 function arrivesInRoom(){
     console.log(roomDescriptions[currentRoom])
     userAction = getUserAction()
 };
 
-/* Trying to get user response */
+
 function getUserAction(){
     console.log('\n>_')
     process.stdin.once('data', (chunk) => {
@@ -26,7 +25,6 @@ function getUserAction(){
 });
 };
 
-/* Checking to see if the action matches our list of actions */
 function checkActionMainSt(){
     console.log('')
     if(userAction === 'read sign'){
@@ -44,8 +42,11 @@ function checkActionMainSt(){
         arrivesInRoom()
     } else if(userAction === 'check inventory' || userAction ==='i' || userAction ==='inventory') {
         checkInventory()
-    } else if(userAction === 'enter code 12345' || userAction === 'enter 12345' || userAction === '12345'){
-        console.log('Success! The door opens. You enter the foyer and the \ndoor shuts behind you')
+    } else if(
+        (userAction.split(' ')[0] === 'enter' && userAction.split(' ')[1] === 'code' && userAction.split(' ')[2] === '12345') || 
+        (userAction.split(' ')[0] === 'enter' && userAction.split(' ')[1] === '12345') ||
+        (userAction === '12345')){
+        console.log('Success! The door opens. You enter the foyer and the \ndoor shuts behind you.\n')
         currentRoom = 'Foyer'
         arrivesInRoom()
     } else if(userAction === 'hint'){
@@ -130,3 +131,5 @@ function removeInventory(item){
     getUserAction()
 }
 
+console.log('Your journey begins....\n')
+arrivesInRoom();
